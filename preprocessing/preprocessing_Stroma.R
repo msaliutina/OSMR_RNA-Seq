@@ -10,7 +10,7 @@ library(ggpubr)
 library(RColorBrewer)
 library(ggalluvial)
 
-load("~/Desktop/Hegazy lab/single_cell_2023/SO_reclustered_GSEA_celltypeAnnotation_Stroma.rdata")
+load("data/sc_raw/SO_reclustered_GSEA_celltypeAnnotation_Stroma.rdata")
 Stroma <- SO
 rm(SO)
 
@@ -45,7 +45,7 @@ Stroma <- FindClusters(Stroma, resolution = 1.2, verbose = F)
 Stroma <- RunUMAP(Stroma, dims = 1:30, verbose = F)
 Idents(Stroma) <- Stroma@meta.data$celltypes
 
-saveRDS(Stroma, '~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/Stroma_final.rds')
+saveRDS(Stroma, 'data/sc_final/Stroma_final.rds')
 
 
 

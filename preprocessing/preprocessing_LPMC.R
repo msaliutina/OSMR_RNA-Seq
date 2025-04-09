@@ -1,6 +1,6 @@
 library(Seurat)
 
-LPMC <- readRDS('/Users/mariiasaliutina/Desktop/Hegazy lab/single_cell_2023/Seurat objects/LPMC.rds')
+LPMC <- readRDS('data/sc_raw/LPMC.rds')
 
 LPMC[["percent.mt"]] <- PercentageFeatureSet(LPMC, pattern = "^mt-")
 LPMC <- subset(LPMC, subset = percent.mt < 25)
@@ -29,5 +29,5 @@ LPMC_ed <- SetIdent(LPMC_ed, cells = NK_cells_4, value = 'Cd8 effector')
 
 LPMC_ed$celltypes<- Idents(LPMC_ed)
 
-saveRDS(LPMC_ed, 'Seurat objects/LPMC_final.Rds')
+saveRDS(LPMC_ed, 'data/sc_final/LPMC_final.Rds')
 

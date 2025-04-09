@@ -13,7 +13,7 @@ library(harmony)
 
 
 
-EpCam <- readRDS('~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/EpCam.rds')
+EpCam <- readRDS('data/sc_raw/EpCam.rds')
 
 goblet_4 <- WhichCells(EpCam, idents = 'Enterocytes_4')
 EpCam <- SetIdent(EpCam, cells = goblet_4, value = 'Goblet')
@@ -100,4 +100,4 @@ harmonized_EpCam <- SetIdent(harmonized_EpCam, cells = enterocytes_1_1, value = 
 harmonized_EpCam$celltypes <- Idents(harmonized_EpCam)
 
 
-saveRDS(harmonized_EpCam, "Seurat objects/EpCam_harmony.rds")
+saveRDS(harmonized_EpCam, "data/sc_final/EpCam_harmony.rds")

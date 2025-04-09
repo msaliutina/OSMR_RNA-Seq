@@ -17,7 +17,7 @@ organism = 'org.Mm.eg.db'
 library(organism, character.only = TRUE)
 
 
-tissue_seq <- read.table("~/Desktop/Hegazy lab/bulk_rnaseq_2023/gene_counts_osmr.txt")
+tissue_seq <- read.table("data/bulk_data/gene_counts_osmr.txt")
 
 tissue_seq <- tissue_seq %>% filter(str_detect(gene_biotype, 'protein_coding'))
 

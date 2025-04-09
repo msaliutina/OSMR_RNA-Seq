@@ -6,17 +6,17 @@ library(RColorBrewer)
 library(ggalluvial)
 library(patchwork)
 
-all_data <- readRDS('~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/all_data_final.rds')
-EpCam <- readRDS('~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/EpCam_harmony.rds')
-LPMC <- readRDS('~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/LPMC_final.Rds')
-Stroma <- readRDS('~/Desktop/Hegazy lab/single_cell_2023/Seurat objects/Stroma_final.rds')
+all_data <- readRDS('data/sc_final/all_data_final.rds')
+EpCam <- readRDS('data/sc_final/EpCam_harmony.rds')
+LPMC <- readRDS('data/sc_final/LPMC_final.Rds')
+Stroma <- readRDS('data/sc_final/Stroma_final.rds')
 
 #Fig1E
 
 Idents(all_data) <- all_data$cells
 
 umap_all_data <- DimPlot(all_data,
-        reduction = "umap") 
+                         reduction = "umap") 
 
 #Fig1F
 
@@ -38,8 +38,6 @@ lpmc_umap <- DimPlot(LPMC,
                      label = FALSE) 
 
 lpmc_umap + epcam_umap + stromal_umap 
-
-#Fig1G
 
 #Fig1G
 
@@ -118,7 +116,6 @@ colnames(data.df.2_f)[5] <- "Osm"
 
 data.df_groupes <- osm_LPMC %>% group_by(Hashtag, experiment, celltypes, celltypes_exp)
 
-
 ###add lacking rows
 data.df.2_f[nrow(data.df.2_f) + 1,] = list("Hashtag","LPMCs_G3", 'Neutrophils', 'Neutrophils_LPMCs_G3', 0)
 data.df.2_f[nrow(data.df.2_f) + 1,] = list("Hashtag","LPMCs_G2", 'Plasma cells', 'Plasma cells_LPMCs_G2', 0)
@@ -126,9 +123,13 @@ data.df.2_f[nrow(data.df.2_f) + 1,] = list("Hashtag","LPMCs_G2", 'Ilc3', 'Ilc3_L
 
 
 lpmc_osm_expr <- ggbarplot(data.df.2_f, x = "celltypes", y = "Osm", add = "mean_se",
-          color = "experiment",
-          palette = c('red', 'black'),
-          position = position_dodge(-0.8))+
+                           color = "experiment",
+                           palette = c('red', 'black'),
+                           position = position_dodge(-0.8)) +
+  geom_jitter(aes(x = celltypes, y = Osm, color = experiment),
+              data = data.df.2_f,
+              size = 2, alpha = 0.5,
+              position = position_jitterdodge(jitter.width = 0, dodge.width = -0.8)) +
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))+
   scale_x_discrete(limits = c("Inflammatory Monocytes", "Neutrophils", "Bcells", "DCs", "Cd4",
                               "NK cells", "Ilc1", "Ilc2", "Ilc3", "Tregs", "Cd8", "Cd8 effector",
@@ -153,14 +154,18 @@ df[nrow(df) + 1,] = list(0.00000000, 0.0000000, 'Osm', 'Ilc3', 'LPMCs', 'G2', 'H
 
 
 lpmc_osm_cells <- ggbarplot(df, x = "celltype", y = "pct.exp", add = "mean_se",
-          color = "experiment",
-          palette = c('red', 'black'),
-          position = position_dodge(-0.8))+
+                            color = "experiment",
+                            palette = c('red', 'black'),
+                            position = position_dodge(-0.8))+
+  geom_jitter(aes(x = celltype, y = Osmr, color = experiment),
+              data = df,
+              size = 2, alpha = 0.5,
+              position = position_jitterdodge(jitter.width = 0, dodge.width = -0.8)) +
   theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))+
   scale_x_discrete(limits = c("Inflammatory Monocytes", "Neutrophils", "Bcells", "DCs", "Cd4",
                               "NK cells", "Ilc1", "Ilc2", "Ilc3", "Tregs", "Cd8", "Cd8 effector",
                               "Plasma cells", "Proliferating", "gd-tcells")) +
-  stat_compare_means(aes(group = celltypes_exp), label = "p.format", label.y = 60)
+  stat_compare_means(aes(group = celltypes_exp), label = "p.format", label.y = 60) 
 
 
 #Fig1I
@@ -175,10 +180,14 @@ colnames(data.df.epcam)[5] <- "Osmr"
 
 data.df.epcam <- data.df.epcam %>% filter(Hashtag != c('inconclusive'))
 
-epcam_osmr_expr <- ggbarplot(data.df.epcam, x = "celltypes", y = "Osmr", add = "mean_se",
-          color = "experiment", palette = c('red', 'black'), 
-          position = position_dodge(-0.8))+
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
+epcam_osmr_expr <- ggbarplot(data.df.epcam, x = "celltypes", y = "Osmr", add = c("jitter", "mean_se"),
+                             color = "experiment", palette = c('red', 'black'), 
+                             position = position_dodge(-0.8))+
+  geom_jitter(aes(x = celltypes, y = pct.exp, color = experiment),
+              data = data.df.epcam,
+              size = 2, alpha = 0.5,
+              position = position_jitterdodge(jitter.width = 0, dodge.width = -0.8))
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
   scale_x_discrete(limits = c('Enterocytes_1_0',
                               'Enterocytes_1_1',
                               'Enterocytes_2',
@@ -214,8 +223,12 @@ df$celltypes_exp <- gsub('1.1', '1_1', df$celltypes_exp)
 
 
 epcam_osmr_cells <- ggbarplot(df, x = "celltype", y = "pct.exp", add = "mean_se",
-          color = "experiment", palette = c('red', 'black'), 
-          position = position_dodge(-0.8))+
+                              color = "experiment", palette = c('red', 'black'), 
+                              position = position_dodge(-0.8))+
+  geom_jitter(aes(x = celltype, y = pct.exp, color = experiment),
+              data = df,
+              size = 2, alpha = 0.5,
+              position = position_jitterdodge(jitter.width = 0, dodge.width = -0.8)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))+
   scale_x_discrete(limits = c('Enterocytes_1_0',
                               'Enterocytes_1_1',
@@ -228,3 +241,4 @@ epcam_osmr_cells <- ggbarplot(df, x = "celltype", y = "pct.exp", add = "mean_se"
                               'Proliferating epithelial cells',
                               'Tuft')) +
   stat_compare_means(aes(group = celltypes_exp), label = "p.format", label.y = 25)
+
