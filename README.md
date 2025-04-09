@@ -9,7 +9,7 @@ The analysis includes the following steps:
 
 - Preprocessing of bulk and single cell RNA-Seq data
 - Exploratory data analysis
-- Generation of visualizations (PCA, heatmaps, MA plots, volcano plots)
+- Generation of visualizations (barplots, dotplots, heatmaps, ORA analysis, volcano plots etc)
 - cell-cell interaction analysis
 - etc
   
