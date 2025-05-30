@@ -1,7 +1,7 @@
 # OSMR RNA-Seq Analysis
 
 This repository contains the code used for RNA-Seq differential expression analysis of **OSMR** (Oncostatin M Receptor) expression across different sample groups, as presented in the Nature Immunology publication (2025):  
-**The interleukin 22–oncostatin M axis promotes intestinal inflammation and tumorigenesis**
+[**The interleukin 22–oncostatin M axis promotes intestinal inflammation and tumorigenesis**](https://www.nature.com/articles/s41590-025-02149-z)
 
 ## Overview
 
